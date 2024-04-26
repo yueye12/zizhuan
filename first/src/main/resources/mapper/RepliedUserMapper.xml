@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.Chen.RepliedUserMapper">
+    <insert id="insert" parameterType="com.example.demo.model.RepliedUser" useGeneratedKeys="true" keyProperty="id">
+
+        insert into replieduser (replied, question_id, user_id) values (#{repliedUser.replied},#{repliedUser.question_id},#{repliedUser.user_id})
+    </insert>
+
+
+    <select id="selectByUserIdAndQuestionId" parameterType="com.example.demo.model.RepliedUser" resultType="com.example.demo.model.RepliedUser">
+        select *
+        from replieduser
+        where user_id=#{repliedUser.user_id} and question_id=#{repliedUser.question_id}
+    </select>
+
+    <update id="updateByUserIdAndQuestionId" parameterType="com.example.demo.model.RepliedUser">
+        update replieduser
+        set replied = #{repliedUser.replied}
+            <if test="repliedUser.updatedAt!=null" >
+            , updated_at=#{repliedUser.updatedAt}
+
+            </if>
+       where user_id=#{repliedUser.user_id} and question_id=#{repliedUser.question_id}
+    </update>
+
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,19 @@
+#spring.application.name=first
+
+
+ALIYUN_AK_ID: LTAI5tG9CYTCuvRLvcZx3pwJ
+ALIYUN_AK_SECRET: diDGaA4ymcoFkGdOF396JK3tokPQNx
+spring:
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.108.144.113:3333/memoir?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+    username: memoir
+    password: cBDWs3n8C5dDXM2y
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    return-instance-for-empty-row: true
+

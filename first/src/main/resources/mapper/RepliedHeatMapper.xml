@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.Chen.RepliedHeatMapper">
+    <update id="update" parameterType="com.example.demo.model.RepliedHeat"  useGeneratedKeys="true" keyProperty="id" >
+        update repliedheat set replied = #{repliedHeat.replied} where user_id=#{repliedHeat.user_id} and question_id=#{repliedHeat.question_id}
+    </update>
+
+
+
+
+</mapper>
