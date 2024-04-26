@@ -22,10 +22,9 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      */
     protected void addInterceptors(InterceptorRegistry registry) { //InterceptorRegistry:注册拦截器
         log.info("开始注册自定义拦截器...");
-        System.out.println(jwtTokenUserInterceptor);
         registry.addInterceptor(jwtTokenUserInterceptor) //向注册器中添加一个拦截器。
                 .addPathPatterns("/**") //将指定的路径模式添加到拦截器注册器中
-                .excludePathPatterns("/login","/transcribeAudio","/audiotext","/chat"); //从拦截器注册器中排除指定的路径模式
+                .excludePathPatterns("/user/login"); //从拦截器注册器中排除指定的路径模式
 
     }
 }
