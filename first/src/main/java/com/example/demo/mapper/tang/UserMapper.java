@@ -1,11 +1,9 @@
 package com.example.demo.mapper.tang;
 
-import com.example.demo.model.domain.entity.Question;
-import com.example.demo.model.domain.entity.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import com.example.demo.model.domain.Repliedheat;
+import com.example.demo.model.domain.User;
+import org.apache.ibatis.annotations.*;
 
-import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -13,9 +11,10 @@ public interface UserMapper {
     @Select("select * from user where account = #{account};")
     User getByUsername(String account);
 
-    @Select("select * from question where grade = #{grade}")
-    List<Question> selectGrade(Long grade);
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("insert into repliedheat(replied,question_id,user_id,created_at,updated_at) values (#{replied},#{questionId},#{userId},#{createdAt},#{updatedAt})")
+    void insert(Repliedheat repliedheat);
 
-    @Select("select replied from repliedheat where question_id = #{questionId} and user_id=#{userId}")
-    String selectReplied(Long userId, Long questionId);
+    @Update("update repliedheat set replied= #{replied},updated_at = #{updatedAt} where id = #{id}")
+    void updateheat(Repliedheat repliedheat);
 }
