@@ -26,7 +26,7 @@ public class QuestionController {
     RepliedUserService repliedUserService;
 
 
-    @PostMapping("/selecttitle")
+    @PostMapping("/selectissue")
     public JsonResult queryIssue(@RequestParam Integer id, HttpServletRequest request)
     {
 

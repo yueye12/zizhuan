@@ -2,8 +2,12 @@ package com.example.demo.model.handler;
 
 import com.example.demo.model.constant.MessageConstant;
 import com.example.demo.model.exception.BaseException;
+import com.example.demo.model.exception.TokenExpiredException;
 import com.example.demo.model.result.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -30,8 +34,6 @@ public class GlobalExceptionHandler {
     /**
      * 处理SQL异常
      *
-     * @param sqlIntegrityConstraintViolationException
-     * @return
      */
     @ExceptionHandler
     public Result exceptionHandler(SQLIntegrityConstraintViolationException sqlIntegrityConstraintViolationException) {
@@ -44,5 +46,16 @@ public class GlobalExceptionHandler {
         } else {
             return Result.error(MessageConstant.UNKNOWN_ERROR);
         }
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Result handleMissingServletRequestParameterException(MissingServletRequestParameterException missingServletRequestParameterException) {
+        String parameterName = missingServletRequestParameterException.getParameterName();
+        return Result.error( "没有参数" + parameterName);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public Result handleTokenExpiredException(TokenExpiredException tokenExpiredException) {
+        return Result.error("Token过期或不存在");
     }
 }
