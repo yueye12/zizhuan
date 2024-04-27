@@ -1,0 +1,19 @@
+Index: first/src/main/java/com/example/demo/controller/Chens/QuestionController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.controller.Chens;\r\n\r\n\r\nimport com.example.demo.config.JwtProperties;\r\nimport com.example.demo.model.RepliedUser;\r\nimport com.example.demo.model.utils.JwtUtil;\r\nimport com.example.demo.packet.JsonResult;\r\nimport com.example.demo.service.Chen.QuestionService;\r\nimport com.example.demo.service.Chen.RepliedUserService;\r\nimport jakarta.servlet.http.HttpServletRequest;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\n@RestController\r\n@CrossOrigin(\r\n        origins = {\"*\"}\r\n)\r\npublic class QuestionController {\r\n\r\n    @Autowired\r\n    QuestionService questionService;\r\n    @Autowired\r\n    RepliedUserService repliedUserService;\r\n\r\n\r\n    @PostMapping(\"/selecttitle\")\r\n    public JsonResult queryIssue(@RequestParam Integer id, HttpServletRequest request)\r\n    {\r\n\r\n\r\n        String issue = questionService.queryIssue(id);\r\n        int userId= (Integer)JwtUtil.parseJWT(new JwtProperties().getAdminSecretKey(),request.getHeader(\"token\")).get(\"userId\");\r\n\r\n        RepliedUser repliedUser=new RepliedUser();\r\n        repliedUser.setQuestion_id(id);\r\n        repliedUser.setUser_id(userId);\r\n\r\n        int state=repliedUserService.selectByUserIdAndQuestionId(repliedUser)==null?1:0;\r\n        Map<String,Object> data=new HashMap<>();\r\n        data.put(\"id\",id);\r\n        data.put(\"state\",state);\r\n        data.put(\"issue\",issue);\r\n\r\n        return new JsonResult<>(data,\"200\",\"返回成功\");\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/first/src/main/java/com/example/demo/controller/Chens/QuestionController.java b/first/src/main/java/com/example/demo/controller/Chens/QuestionController.java
+--- a/first/src/main/java/com/example/demo/controller/Chens/QuestionController.java	(revision 24b3c8b56088df4450e7a83985efdd0198e9144e)
++++ b/first/src/main/java/com/example/demo/controller/Chens/QuestionController.java	(date 1714138516215)
+@@ -26,7 +26,7 @@
+     RepliedUserService repliedUserService;
+ 
+ 
+-    @PostMapping("/selecttitle")
++    @PostMapping("/selectissue")
+     public JsonResult queryIssue(@RequestParam Integer id, HttpServletRequest request)
+     {
+ 
