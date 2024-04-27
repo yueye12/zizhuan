@@ -1,15 +1,19 @@
 package com.example.demo.service;
 
 
-
+import com.example.demo.model.domain.vo.QuestionVO;
+import com.example.demo.model.domain.vo.UserInfoVO;
+import com.example.demo.model.domain.vo.UserLoginVO;
 
 import java.util.List;
 
 public interface UserService {
 
-    String login(String account, String password);
+    UserLoginVO login(String account, String password);
 
-    Integer createheat(Integer id, String issue);
+    List<QuestionVO> select(Long grade);
 
-    void updateheat(Integer id, String issue);
+    List updateInformation(UserInfoVO userUpdateVO);
+
+    UserInfoVO selectInformation(Long userid);
 }

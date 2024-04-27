@@ -1,13 +1,14 @@
 package com.example.demo.controller.tang;
 
+import com.example.demo.model.domain.vo.QuestionVO;
+import com.example.demo.model.domain.vo.UserLoginVO;
 import com.example.demo.model.result.Result;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,29 +19,18 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/user/login")
-    public Result<String> login(@RequestParam String account, @RequestParam String password){
-        return Result.success(userService.login(account,password));
+    @PostMapping("/login")
+    public Result<UserLoginVO> login(@RequestParam String account,
+                                     @RequestParam String password){
+
+        UserLoginVO userLoginVO = userService.login(account,password);
+        return Result.success(userLoginVO);
     }
 
-    @PostMapping("/createheat")
-    public Result<Map<String,Integer>> createheat(@RequestParam Integer Id,@RequestParam String issue){
-        Integer id = userService.createheat(Id, issue);
-        Map<String, Integer> data = new HashMap<>();
-        data.put("id",id);
-        return Result.success(data);
-    }
+    @GetMapping("/grade")
+    public Result<List<QuestionVO>> grade(@RequestParam Long grade){
 
-    @PostMapping("/updateheat")
-    public Result<Map<String,String>> updateheat(@RequestParam Integer Id,@RequestParam String issue){
-        System.out.println(issue);
-        userService.updateheat(Id,issue);
-        Map<String,String > data = new HashMap<>();
-        data.put("issue",issue);
-        return Result.success(data);
+        List<QuestionVO> questionVO = userService.select(grade);
+        return Result.success(questionVO);
     }
 }
-
-
-
-

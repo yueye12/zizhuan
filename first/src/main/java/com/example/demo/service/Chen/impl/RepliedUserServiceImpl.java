@@ -28,5 +28,9 @@ public class RepliedUserServiceImpl implements RepliedUserService {
         return repliedUserMapper.selectByUserIdAndQuestionId(repliedUser);
     }
 
+    @Override
+    public int updateByUserIdAndQuestionId(RepliedUser repliedUser) {
 
+        return repliedUserMapper.updateByUserIdAndQuestionId(repliedUser);
+    }
 }

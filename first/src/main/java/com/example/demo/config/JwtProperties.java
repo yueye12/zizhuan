@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component;
 public class JwtProperties {
     private String adminSecretKey = "itcast";
     private long adminTtl = 7200000;
-    private String adminTokenName = "Authorization";
+    private String adminTokenName = "token";
 }
