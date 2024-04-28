@@ -6,6 +6,7 @@ import lombok.Data;
 public class Question {
     private Integer id;
     private String issue;
+    private Integer module_id;
     private Integer grade;
 
 
