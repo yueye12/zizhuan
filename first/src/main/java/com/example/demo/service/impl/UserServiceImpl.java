@@ -3,21 +3,19 @@ package com.example.demo.service.impl;
 
 import com.example.demo.config.JwtProperties;
 import com.example.demo.mapper.tang.UserMapper;
+import com.example.demo.model.Question;
 import com.example.demo.model.constant.MessageConstant;
 import com.example.demo.model.context.BaseContext;
-import com.example.demo.model.domain.entity.Question;
+import com.example.demo.model.domain.entity.Repliedheat;
 import com.example.demo.model.domain.entity.User;
-import com.example.demo.model.domain.vo.QuestionVO;
 import com.example.demo.model.domain.vo.UserInfoVO;
-import com.example.demo.model.domain.vo.UserLoginVO;
 import com.example.demo.model.exception.AccountNotFoundException;
 import com.example.demo.model.utils.JwtUtil;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private final JwtProperties jwtProperties;
 
     @Override
-    public UserLoginVO login(String account, String password) {
+    public String login(String account, String password) {
         // 根据用户名查找
         User user = userMapper.getByUsername(account);
         // 判断用户名是否存在
@@ -44,44 +42,11 @@ public class UserServiceImpl implements UserService {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId()); //将id属性封装到jwt令牌
-        String token = JwtUtil.createJWT(
+
+        return JwtUtil.createJWT(
                 jwtProperties.getAdminSecretKey(),
                 jwtProperties.getAdminTtl(),
                 claims);
-
-        return UserLoginVO.builder()
-                .id(user.getId())
-                .token(token)
-                .build();
-    }
-
-    @Override
-    public List<QuestionVO> select(Long grade) {
-
-        Long userId = BaseContext.getCurrentId();
-
-        List<Question> questions = userMapper.selectGrade(grade);
-
-        List<QuestionVO> questionVOList = new ArrayList<>();
-        if (questions != null && !questions.isEmpty()) {
-
-            questions.forEach(question -> {
-
-                QuestionVO questionVO = new QuestionVO();
-                BeanUtils.copyProperties(question, questionVO);
-
-                Long questionId = question.getId();
-                String replied = userMapper.selectReplied(userId, questionId);
-
-                if (replied == null) {
-                    questionVO.setStatus(Long.valueOf("1"));
-                } else questionVO.setStatus(Long.valueOf("0"));
-
-                questionVOList.add(questionVO);
-            });
-        }
-
-        return questionVOList;
     }
 
     @Override
@@ -144,5 +109,39 @@ public class UserServiceImpl implements UserService {
         return userInfoVO;
     }
 
+    @Override
+    public Integer createheat(Integer id, String issue) {
+        LocalDateTime now = LocalDateTime.now();
+        Question question = userMapper.selectQuestion(id);
+        if (question == null ) {
+            throw new AccountNotFoundException("传入id不存在");
+        }
+        Long currentId = BaseContext.getCurrentId();
+        Repliedheat repliedheat = Repliedheat.builder()
+                .replied(issue)
+                .questionId(id)
+                .userId(currentId)
+                .createdAt(now)
+                .updatedAt(now)
+                .build();
+        userMapper.insert(repliedheat);
+        return repliedheat.getId();
+    }
 
+    @Override
+    public void updateheat(Integer id, String issue) {
+        Repliedheat repliedheat1 = userMapper.selectRepliedheat(id);
+        if (repliedheat1 == null) {
+            throw new AccountNotFoundException("传入id不存在");
+        }
+        LocalDateTime now = LocalDateTime.now();
+        if (issue != null && !issue.isEmpty()) {
+            Repliedheat repliedheat = Repliedheat.builder()
+                    .id(id)
+                    .replied(issue)
+                    .updatedAt(now)
+                    .build();
+            userMapper.updateheat(repliedheat);
+        }
+    }
 }

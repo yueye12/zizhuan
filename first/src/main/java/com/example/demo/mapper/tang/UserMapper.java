@@ -1,10 +1,9 @@
 package com.example.demo.mapper.tang;
 
-import com.example.demo.model.domain.entity.Question;
+import com.example.demo.model.Question;
+import com.example.demo.model.domain.entity.Repliedheat;
 import com.example.demo.model.domain.entity.User;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -14,12 +13,6 @@ public interface UserMapper {
     @Select("select * from user where account = #{account};")
     User getByUsername(String account);
 
-    @Select("select * from question where grade = #{grade}")
-    List<Question> selectGrade(Long grade);
-
-    @Select("select replied from repliedheat where question_id = #{questionId} and user_id=#{userId}")
-    String selectReplied(Long userId, Long questionId);
-
     @Select("select * from user where id = #{userId}")
     User getById(Long userId);
 
@@ -28,4 +21,17 @@ public interface UserMapper {
 
     @Select("select id, account, age, name, sex, user_condition from user")
     List<User> getAll();
+
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("insert into repliedheat(replied,question_id,user_id,created_at,updated_at) values (#{replied},#{questionId},#{userId},#{createdAt},#{updatedAt})")
+    void insert(Repliedheat repliedheat);
+
+    @Update("update repliedheat set replied= #{replied},updated_at = #{updatedAt} where id = #{id}")
+    void updateheat(Repliedheat repliedheat);
+
+    @Select("select * from question where id = #{id};")
+    Question selectQuestion(Integer id);
+
+    @Select("select * from repliedheat where id =#{id}")
+    Repliedheat selectRepliedheat(Integer id);
 }

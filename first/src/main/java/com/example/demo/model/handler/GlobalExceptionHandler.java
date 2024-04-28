@@ -4,6 +4,7 @@ import com.example.demo.model.constant.MessageConstant;
 import com.example.demo.model.exception.BaseException;
 import com.example.demo.model.result.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -44,5 +45,11 @@ public class GlobalExceptionHandler {
         } else {
             return Result.error(MessageConstant.UNKNOWN_ERROR);
         }
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Result handleMissingServletRequestParameterException(MissingServletRequestParameterException missingServletRequestParameterException) {
+        String parameterName = missingServletRequestParameterException.getParameterName();
+        return Result.error( "没有参数" + parameterName);
     }
 }
